@@ -19,10 +19,13 @@ public class ARTapToPlaceObject : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+            if (touch.phase == TouchPhase.Began)
             {
-                Pose hitPose = hits[0].pose;
-                Instantiate(objectToPlace, hitPose.position, hitPose.rotation);
+                if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+                {
+                    Pose hitPose = hits[0].pose;
+                    Instantiate(objectToPlace, hitPose.position, hitPose.rotation);
+                }
             }
         }
     }
