@@ -14,7 +14,13 @@ public class TestSpawn : MonoBehaviour
 
     public void Spawn()
     {
-        Instantiate(_spawnObj, _offsetObj.transform.position, Quaternion.identity);  //オブジェクトの生成
+        Instantiate(_spawnObj, _offsetObj.transform.position, Quaternion.Euler(0,-90,0));  //オブジェクトの生成
+    }
+
+        void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(_offsetObj.transform.position, 0.1f);
     }
     // Update is called once per frame
     void Update()
