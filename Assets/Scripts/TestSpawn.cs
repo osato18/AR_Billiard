@@ -35,11 +35,6 @@ public class TestSpawn : MonoBehaviour
         _rayPointManager = _rayPointObj.GetComponent<RayPointManager>();
     }
 
-    public void Spawn()
-    {
-        Instantiate(_spawnObj, _raySpawnPoint.transform.position, Quaternion.identity);
-    }
-
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
