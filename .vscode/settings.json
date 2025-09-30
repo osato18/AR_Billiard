@@ -51,5 +51,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ARGacha.sln"
+    "dotnet.defaultSolution": "ARGacha.sln",
+    "cSpell.words": [
+        "Rigidbody"
+    ]
 }

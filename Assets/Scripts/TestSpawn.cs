@@ -12,11 +12,14 @@ public class TestSpawn : MonoBehaviour
     //ARRayCastのコード
     public TrackableType type;
 
+    [SerializeField] private ARPlaneManager _planeManager;
+
     ARRaycastManager _raycastManager;
     List<ARRaycastHit> hitResults = new List<ARRaycastHit>();
 
     //テスト
-    [SerializeField] private GameObject _spawnObj;
+    [SerializeField] private GameObject _bordObj;
+    [SerializeField] private GameObject _ballObj;
     [SerializeField] private GameObject _offsetObj;
 
     [SerializeField] private GameObject _rayPointObj;
@@ -35,11 +38,6 @@ public class TestSpawn : MonoBehaviour
         _rayPointManager = _rayPointObj.GetComponent<RayPointManager>();
     }
 
-    public void Spawn()
-    {
-        Instantiate(_spawnObj, _raySpawnPoint.transform.position, Quaternion.identity);
-    }
-
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -54,5 +52,19 @@ public class TestSpawn : MonoBehaviour
             _rayPointManager.RayPointChanger(hitResults[0].pose.position);
         }
         Debug.DrawRay(_ray.origin, _ray.direction * 1000f, Color.cyan);
+    }
+
+    public void BordSpawn()
+    {
+        Instantiate(_bordObj, _rayPointObj.transform.position + (_rayPointObj.transform.up / 3), Quaternion.identity);
+        _planeManager.enabled = false;
+        foreach (var plane in _planeManager.trackables)
+        {
+            plane.gameObject.SetActive(false);
+        }
+    }
+    public void BallSpawn()
+    {
+        Instantiate(_ballObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
     }
 }

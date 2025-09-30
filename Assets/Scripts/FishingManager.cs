@@ -51,7 +51,7 @@ public class FishingManager : MonoBehaviour
         if (_casted)
         {
             _biteTime = Random.Range(0f, 5.0f);
-            Invoke("Fight", _biteTime);
+            //Invoke("Fight", _biteTime);
             _casted=false;
         }
     }
