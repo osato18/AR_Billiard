@@ -1864,6 +1864,7 @@ MonoBehaviour:
   _planeManager: {fileID: 2143677922}
   _bordObj: {fileID: 807007179823393515, guid: 80dc6fd516733bc449858e4e23785a7d, type: 3}
   _ballObj: {fileID: 1677155629305911436, guid: 99b42ffb164d85b4bad970ee4e042b12, type: 3}
+  _manipulationObj: {fileID: 461480298853610457, guid: bdec3453e375d39478630b4fbc48f9d6, type: 3}
   _offsetObj: {fileID: 409058268}
   _rayPointObj: {fileID: 260531027}
   _rayOriginObj: {fileID: 1939250459}
@@ -2095,7 +2096,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 822350737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1983462476
+--- !u!1 &1960107018
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2103,40 +2104,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1983462478}
-  - component: {fileID: 1983462477}
+  - component: {fileID: 1960107020}
+  - component: {fileID: 1960107019}
   m_Layer: 0
-  m_Name: FishingManager
+  m_Name: ShotController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1983462477
+--- !u!114 &1960107019
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983462476}
+  m_GameObject: {fileID: 1960107018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d52a2296113ed74f9e6c7b7ee280fe6, type: 3}
+  m_Script: {fileID: 11500000, guid: 994ca24ed4b37db4d9cf82ae79fe4bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastManager: {fileID: 2143677921}
-  _lureObj: {fileID: 3966943149905736012, guid: 6cf3973f5665a7843abc84d8b09f80ae, type: 3}
-  _castOriginObj: {fileID: 1606019834}
---- !u!4 &1983462478
+  _arCamera: {fileID: 822350743}
+--- !u!4 &1960107020
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983462476}
+  m_GameObject: {fileID: 1960107018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.24988298, y: 0.18718427, z: 1.2959983}
+  m_LocalPosition: {x: 0, y: 0, z: 3.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2327,4 +2326,4 @@ SceneRoots:
   - {fileID: 1799343193}
   - {fileID: 721302753}
   - {fileID: 1876183495}
-  - {fileID: 1983462478}
+  - {fileID: 1960107020}
