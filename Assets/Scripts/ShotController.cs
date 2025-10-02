@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 public class ShotController : MonoBehaviour
 {
     [Header("ARSessionOrigin配下のARCameraをセット")]
     [SerializeField] private Camera _arCamera;
 
+    [Header("飛ばす力")]
+    [SerializeField] private float _shotPower;
+    //Debug用
+    [SerializeField] private TMP_Text _DBAddFText;
     private Ray _touchRay;
     private void Shot(Rigidbody cueBallRb)
     {
-        cueBallRb.AddForce(_arCamera.transform.forward*5f, ForceMode.Impulse);
+        Vector3 _shotVec = new Vector3(_arCamera.transform.forward.x, 0.0f, _arCamera.transform.forward.z) * _shotPower;
+        cueBallRb.AddForce(_shotVec, ForceMode.Impulse);
+        _DBAddFText.text = _shotVec.ToString();
     }
     // Start is called before the first frame update
     void Start()

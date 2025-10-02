@@ -20,7 +20,7 @@ public class TestSpawn : MonoBehaviour
     //テスト
     [SerializeField] private GameObject _bordObj;
     [SerializeField] private GameObject _ballObj;
-    [SerializeField] private GameObject _manipulationObj;
+    [SerializeField] private GameObject _cueBallObj;
     [SerializeField] private GameObject _offsetObj;
 
     [SerializeField] private GameObject _rayPointObj;
@@ -58,7 +58,7 @@ public class TestSpawn : MonoBehaviour
     public void BordSpawn()
     {
         Instantiate(_bordObj, _rayPointObj.transform.position + (_rayPointObj.transform.up / 3), Quaternion.identity);
-        Instantiate(_manipulationObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
+        Instantiate(_cueBallObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
         _planeManager.enabled = false;
         foreach (var plane in _planeManager.trackables)
         {
@@ -68,5 +68,9 @@ public class TestSpawn : MonoBehaviour
     public void BallSpawn()
     {
         Instantiate(_ballObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
+    }
+    public void CueBallSpawn()
+    {
+        Instantiate(_cueBallObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
     }
 }
