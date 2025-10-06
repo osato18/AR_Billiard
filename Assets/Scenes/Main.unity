@@ -296,7 +296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -642}
+  m_AnchoredPosition: {x: 0, y: -460}
   m_SizeDelta: {x: 219, y: 119.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &192632433
@@ -631,7 +631,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -120, y: 836}
+  m_AnchoredPosition: {x: -120, y: 608}
   m_SizeDelta: {x: 526.7, y: 139.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &275091713
@@ -893,7 +893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -507}
+  m_AnchoredPosition: {x: 0, y: -325}
   m_SizeDelta: {x: 287.2, y: 119.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603276649
@@ -1929,7 +1929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -800}
+  m_AnchoredPosition: {x: 0, y: -618}
   m_SizeDelta: {x: 241.7, y: 134.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &953819595
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   _planeManager: {fileID: 2143677922}
-  _bordObj: {fileID: 807007179823393515, guid: 80dc6fd516733bc449858e4e23785a7d, type: 3}
+  _bordObj: {fileID: 8052665098286028531, guid: acf0dc144e1a6fc41b29c6024116f561, type: 3}
   _ballObj: {fileID: 1677155629305911436, guid: 99b42ffb164d85b4bad970ee4e042b12, type: 3}
   _cueBallObj: {fileID: 461480298853610457, guid: bdec3453e375d39478630b4fbc48f9d6, type: 3}
   _offsetObj: {fileID: 409058268}
