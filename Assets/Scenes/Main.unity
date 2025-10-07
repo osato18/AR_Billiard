@@ -2664,6 +2664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _arCamera: {fileID: 822350743}
+  _previewArrowObj: {fileID: 3918946555662261813, guid: a34f47b1f94087941a599affcd4b3579, type: 3}
   _shotPower: 2
   _DebugText: {fileID: 275091713}
   _DebugText2: {fileID: 747703980}
