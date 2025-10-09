@@ -12,13 +12,22 @@ public class ShotController : MonoBehaviour
     [Header("プレビュー矢印")]
     [SerializeField] private GameObject _previewArrowObj;
 
-    [Header("飛ばす力")]
-    [SerializeField] private float _shotPower;
+    [Header("飛ばす力（最大値）")]
+    [SerializeField] private float _maxShotPower;
+
+    [Header("飛ばす力（増幅度）")]
+    [SerializeField] private float _deltaShotPower;
+
+    //Debug用
+    [SerializeField] private TextMeshProUGUI _textObj1;
+    [SerializeField] private TextMeshProUGUI _textObj2;
+
     private Vector3 _touchBeganPos;
     private Vector3 _shotVector;
-
     private GameObject _showPreviewArrowObj;
-    private void PrepareShotPreview(Touch touch,RaycastHit hit)
+    private float _shotPower;
+    private bool _isIncreasing = true;
+    private void PrepareShotPreview(Touch touch, RaycastHit hit)
     {
         _touchBeganPos = touch.position;  //手玉をタップした際の画面上座標
         //プレビュー
@@ -36,6 +45,28 @@ public class ShotController : MonoBehaviour
         _showPreviewArrowObj.transform.rotation = arrowRot;
         return screenVector;
     }
+
+    private void AdjustShotPower()
+    {
+        if (_isIncreasing)
+        {
+            _shotPower += _deltaShotPower * Time.deltaTime;
+            if (_shotPower >= _maxShotPower)
+            {
+                _shotPower = _maxShotPower;
+                _isIncreasing = false;
+            }
+        }
+        else
+        {
+            _shotPower -= _deltaShotPower * Time.deltaTime;
+            if (_shotPower <= 0)
+            {
+                _shotPower = 0;
+                _isIncreasing = true;
+            }
+        }
+    }
     private void Shot(Rigidbody cueBallRb, Vector3 forceVector)  //球を発射
     {
         forceVector = forceVector * _shotPower;
@@ -46,9 +77,19 @@ public class ShotController : MonoBehaviour
     void Start()
     {
         //_BeganCueBallを購読
-        _controllerSub.BeganCueBall.Subscribe(beganData=>
+        _controllerSub.BeganCueBall.Subscribe(beganData =>
         {
+            _shotPower = 0.0f;
             PrepareShotPreview(beganData.Touch, beganData.Hit);
+
+            ;           //指を離したら停止
+            Observable.EveryUpdate().TakeUntil(_controllerSub.EndedCueBall).Subscribe(_ =>
+            {
+                AdjustShotPower();
+                //Debug用
+                _textObj1.text = _shotPower.ToString();
+                _textObj2.text = _shotVector.ToString();
+            }).AddTo(this);
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
         //_MovedCueBallを購読

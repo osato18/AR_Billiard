@@ -2710,7 +2710,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _controllerSub: {fileID: 952690842}
   _previewArrowObj: {fileID: 3918946555662261813, guid: a34f47b1f94087941a599affcd4b3579, type: 3}
-  _shotPower: 2
+  _maxShotPower: 3
+  _deltaShotPower: 0.5
+  _textObj1: {fileID: 275091713}
+  _textObj2: {fileID: 747703980}
 --- !u!4 &1960107020
 Transform:
   m_ObjectHideFlags: 0
