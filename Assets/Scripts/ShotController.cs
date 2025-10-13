@@ -29,7 +29,7 @@ public class ShotController : MonoBehaviour
     private bool _isIncreasing = true;
     private void PrepareShotPreview(Touch touch, RaycastHit hit)
     {
-        _touchBeganPos = touch.position;  //手玉をタップした際の画面上座標
+        _touchBeganPos = Camera.main.ScreenToWorldPoint(touch.position);  //手玉をタップした際の画面上座標→ワールド座標変換
         //プレビュー
         _showPreviewArrowObj.transform.SetParent(hit.collider.transform);
         _showPreviewArrowObj.transform.position = hit.collider.transform.position;
@@ -37,8 +37,8 @@ public class ShotController : MonoBehaviour
     }
     private Vector3 ShotPreview(Vector3 beganPos, Vector3 movedPos)  //予告線
     {
-        Vector3 screenVector = beganPos - movedPos;  //移動後位置→手玉タップ位置ベクトル
-        screenVector = new Vector3(screenVector.x, 0.0f, screenVector.y);
+        Vector3 screenVector = beganPos - Camera.main.ScreenToWorldPoint(movedPos);  //移動後位置→手玉タップ位置ベクトル
+        screenVector = new Vector3(screenVector.x, 0.0f, screenVector.z);
         screenVector = screenVector.normalized;     //正規化
         //プレビュー
         Quaternion arrowRot = Quaternion.LookRotation(screenVector);
@@ -86,9 +86,6 @@ public class ShotController : MonoBehaviour
             Observable.EveryUpdate().TakeUntil(_controllerSub.EndedCueBall).Subscribe(_ =>
             {
                 AdjustShotPower();
-                //Debug用
-                _textObj1.text = _shotPower.ToString();
-                _textObj2.text = _shotVector.ToString();
             }).AddTo(this);
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
@@ -96,6 +93,7 @@ public class ShotController : MonoBehaviour
         _controllerSub.MovedCueBall.Subscribe(movedData =>
         {
             _shotVector = ShotPreview(_touchBeganPos, movedData.MovedPos);
+            _textObj2.text = Camera.main.ScreenToWorldPoint(movedData.MovedPos).ToString();
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
         //_EndedCueBallを購読
@@ -107,5 +105,10 @@ public class ShotController : MonoBehaviour
         //プレビュー矢印生成＆非表示
         _showPreviewArrowObj = Instantiate(_previewArrowObj);
         _showPreviewArrowObj.SetActive(false);
+    }
+    private void Update()
+    {
+        //Debug用
+        _textObj1.text = _touchBeganPos.ToString();
     }
 }
