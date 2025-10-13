@@ -2445,7 +2445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   _planeManager: {fileID: 2143677922}
-  _bordObj: {fileID: 807007179823393515, guid: 80dc6fd516733bc449858e4e23785a7d, type: 3}
+  _bordObj: {fileID: 5230450620179983680, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
   _ballObj: {fileID: 1677155629305911436, guid: 99b42ffb164d85b4bad970ee4e042b12, type: 3}
   _cueBallObj: {fileID: 461480298853610457, guid: bdec3453e375d39478630b4fbc48f9d6, type: 3}
   _offsetObj: {fileID: 409058268}
@@ -2710,10 +2710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _controllerSub: {fileID: 952690842}
   _previewArrowObj: {fileID: 3918946555662261813, guid: a34f47b1f94087941a599affcd4b3579, type: 3}
-  _maxShotPower: 3
-  _deltaShotPower: 0.5
-  _textObj1: {fileID: 275091713}
-  _textObj2: {fileID: 747703980}
+  _shotPower: 1.5
 --- !u!4 &1960107020
 Transform:
   m_ObjectHideFlags: 0
@@ -2904,6 +2901,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b66a89f7a8af9794b85db98ee8c0eafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &9000059161793890745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.29801115
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.19205362
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890235799846320122, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230450620179983680, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_Name
+      value: Billiard_Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230450620179983680, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7f3d0031339d0ce439800cf3c974b2f0, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2916,3 +2974,4 @@ SceneRoots:
   - {fileID: 1876183495}
   - {fileID: 1960107020}
   - {fileID: 952690843}
+  - {fileID: 9000059161793890745}
