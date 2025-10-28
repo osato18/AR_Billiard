@@ -19,7 +19,7 @@ public class TestSpawn : MonoBehaviour
 
     //テスト
     [SerializeField] private GameObject _bordObj;
-    [SerializeField] private GameObject _ballObj;
+    [SerializeField] private GameObject[] _ballObj;
     [SerializeField] private GameObject _cueBallObj;
     [SerializeField] private GameObject _offsetObj;
 
@@ -31,6 +31,8 @@ public class TestSpawn : MonoBehaviour
     private RayPointManager _rayPointManager;
 
     private Ray _ray;
+
+    private int i = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +59,7 @@ public class TestSpawn : MonoBehaviour
 
     public void BordSpawn()
     {
-        Instantiate(_bordObj, _rayPointObj.transform.position + (_rayPointObj.transform.up / 3), Quaternion.Euler(-90,0,0));
+        Instantiate(_bordObj, _rayPointObj.transform.position + (_rayPointObj.transform.up / 3), Quaternion.Euler(0, 0, 0));
         Instantiate(_cueBallObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
         _planeManager.enabled = false;
         foreach (var plane in _planeManager.trackables)
@@ -67,7 +69,16 @@ public class TestSpawn : MonoBehaviour
     }
     public void BallSpawn()
     {
-        Instantiate(_ballObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
+        if (i > 6)
+        {
+            Instantiate(_ballObj[i], _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
+        }
+        else
+        {
+            i = 0;
+            Instantiate(_ballObj[i], _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
+        }
+        i++;
     }
     public void CueBallSpawn()
     {
