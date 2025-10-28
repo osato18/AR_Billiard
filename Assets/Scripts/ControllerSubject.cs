@@ -9,6 +9,7 @@ public struct TouchData
     public Rigidbody CueBallRb;
     public Vector3 BeganPos;
     public Vector3 MovedPos;
+    public Vector3 CameraForwardVec;
 }
 public class ControllerSubject : MonoBehaviour
 {
@@ -56,7 +57,8 @@ public class ControllerSubject : MonoBehaviour
                 _movedCueBall.OnNext(new TouchData
                 {
                     CueBallRb = _cueBallRb,
-                    MovedPos = touch.position
+                    MovedPos = touch.position,
+                    CameraForwardVec=_arCamera.transform.forward
                 });
             }
 
