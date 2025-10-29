@@ -9,6 +9,9 @@ public class ShotController : MonoBehaviour
     [Header("ControllerSubjectのオブジェ")]
     [SerializeField] private ControllerSubject _controllerSub;
 
+    [Header("ガイド矢印")]
+    [SerializeField] private GameObject _guideArrowObj;
+
     [Header("プレビュー矢印")]
     [SerializeField] private GameObject _previewArrowObj;
 
@@ -27,45 +30,33 @@ public class ShotController : MonoBehaviour
     private GameObject _showPreviewArrowObj;
     private float _shotPower;
     private bool _isIncreasing = true;
+    private GameObject _cueBallObj;
     private void PrepareShotPreview(Touch touch, RaycastHit hit)
     {
         _touchBeganPos = touch.position;  //手玉をタップした際の画面上座標
         //プレビュー
-        _showPreviewArrowObj.transform.SetParent(hit.collider.transform);
-        _showPreviewArrowObj.transform.position = hit.collider.transform.position;
+        //_showPreviewArrowObj.transform.SetParent(hit.collider.transform);
+        _cueBallObj= hit.collider.gameObject;
         _showPreviewArrowObj.SetActive(true);
     }
-    private Vector3 ShotPreview(Vector3 beganPos, Vector3 movedPos)  //予告線
+    private Vector3 ShotPreview(Vector3 cameraForwardVec)  //予告線
     {
-        Vector3 screenVector = beganPos - movedPos;  //移動後位置→手玉タップ位置ベクトル
-        screenVector = new Vector3(screenVector.x, 0.0f, screenVector.y);
-        screenVector = screenVector.normalized;     //正規化
-        //プレビュー
-        Quaternion arrowRot = Quaternion.LookRotation(screenVector);
+        Vector3 shotVector = new Vector3(cameraForwardVec.x, 0, cameraForwardVec.z);
+        shotVector = shotVector.normalized;
+        //プレビュー（方向）
+        Quaternion arrowRot = Quaternion.LookRotation(shotVector);
         _showPreviewArrowObj.transform.rotation = arrowRot;
-        return screenVector;
+        //プレビュー（大きさ）
+        _showPreviewArrowObj.transform.localScale = new Vector3(_shotPower, 1, _shotPower);
+        //プレビュー（位置）
+        _showPreviewArrowObj.transform.position = _cueBallObj.transform.position;
+        return shotVector;
     }
 
-    private void AdjustShotPower()
+    private float AdjustShotPower(Vector3 beganPos, Vector3 movedPos)
     {
-        if (_isIncreasing)
-        {
-            _shotPower += _deltaShotPower * Time.deltaTime;
-            if (_shotPower >= _maxShotPower)
-            {
-                _shotPower = _maxShotPower;
-                _isIncreasing = false;
-            }
-        }
-        else
-        {
-            _shotPower -= _deltaShotPower * Time.deltaTime;
-            if (_shotPower <= 0)
-            {
-                _shotPower = 0;
-                _isIncreasing = true;
-            }
-        }
+        Vector3 screenVector = beganPos - movedPos;  //移動後位置→手玉タップ位置ベクトル
+        return screenVector.magnitude / 600;  //規格化
     }
     private void Shot(Rigidbody cueBallRb, Vector3 forceVector)  //球を発射
     {
@@ -83,19 +74,20 @@ public class ShotController : MonoBehaviour
             PrepareShotPreview(beganData.Touch, beganData.Hit);
 
             ;           //指を離したら停止
-            Observable.EveryUpdate().TakeUntil(_controllerSub.EndedCueBall).Subscribe(_ =>
+            /*Observable.EveryUpdate().TakeUntil(_controllerSub.EndedCueBall).Subscribe(_ =>
             {
-                AdjustShotPower();
-                //Debug用
-                _textObj1.text = _shotPower.ToString();
-                _textObj2.text = _shotVector.ToString();
-            }).AddTo(this);
+
+            }).AddTo(this);*/
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
         //_MovedCueBallを購読
         _controllerSub.MovedCueBall.Subscribe(movedData =>
         {
-            _shotVector = ShotPreview(_touchBeganPos, movedData.MovedPos);
+            _shotVector = ShotPreview(movedData.CameraForwardVec);
+            _shotPower = AdjustShotPower(_touchBeganPos, movedData.MovedPos);
+            //Debug用
+            //_textObj1.text = _shotPower.ToString();
+            //_textObj2.text = _previewArrowObj.ToString();
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
         //_EndedCueBallを購読

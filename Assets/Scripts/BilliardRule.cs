@@ -93,7 +93,7 @@ public class BilliardRule : MonoBehaviour
         // レイポイント位置の少し上にボードを生成
         _boardObj.SetActive(true);
         _boardObj.transform.position = _rayPointObj.transform.position + (_rayPointObj.transform.up / 3);
-        _boardObj.transform.rotation = default;
+        _boardObj.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         // プレーン検出を停止し、既存プレーンを非表示にする
         _planeManager.enabled = false;
@@ -107,7 +107,7 @@ public class BilliardRule : MonoBehaviour
         float randomNum_x = Random.Range(-0.5f, 0.5f);
         float randomNum_z = Random.Range(-0.5f, 0.5f);
         obObjData.obCollider.gameObject.SetActive(false);
-        obObjData.obCollider.transform.position = _boardObj.transform.position + new Vector3(randomNum_x, 0.01f, randomNum_z);
+        obObjData.obCollider.transform.position = _boardObj.transform.position + new Vector3(randomNum_x, 0.1f, randomNum_z);
         obObjData.obRb.velocity = Vector3.zero;
         obObjData.obRb.angularVelocity = Vector3.zero;
         obObjData.obCollider.gameObject.SetActive(true);
