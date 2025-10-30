@@ -10,6 +10,7 @@ public struct TouchData
     public Vector3 BeganPos;
     public Vector3 MovedPos;
     public Vector3 CameraForwardVec;
+    public bool IsTouch;
 }
 public class ControllerSubject : MonoBehaviour
 {
@@ -22,13 +23,14 @@ public class ControllerSubject : MonoBehaviour
     // UniRxのSubject：通知を流せるオブジェク
     private readonly Subject<TouchData> _beganCueBall=new Subject<TouchData>();
     private readonly Subject<TouchData> _movedCueBall = new Subject<TouchData>();
-    private readonly Subject<TouchData> _endedCueBall=new Subject<TouchData>();
+    private readonly Subject<TouchData> _endedCueBall = new Subject<TouchData>();
+    private readonly Subject<bool> _nonTouchCueBall=new Subject<bool>();
 
     // 外部から購読できるように公開する（IObservableにする）
     public IObservable<TouchData> BeganCueBall =>_beganCueBall;
     public IObservable<TouchData> MovedCueBall => _movedCueBall;
     public IObservable<TouchData> EndedCueBall => _endedCueBall;
-
+    public IObservable<bool> NonTouchCueBall=>_nonTouchCueBall;
     void Update()
     {
         if (Input.touchCount > 0)   //タッチ数カウント
@@ -47,7 +49,8 @@ public class ControllerSubject : MonoBehaviour
                         _beganCueBall.OnNext(new TouchData
                         {
                             Touch = touch,
-                            Hit = hit
+                            Hit = hit,
+                            IsTouch=_isTouchCueBall,
                         });
                     }
                 }
@@ -58,7 +61,8 @@ public class ControllerSubject : MonoBehaviour
                 {
                     CueBallRb = _cueBallRb,
                     MovedPos = touch.position,
-                    CameraForwardVec=_arCamera.transform.forward
+                    CameraForwardVec = _arCamera.transform.forward,
+                    IsTouch=_isTouchCueBall,
                 });
             }
 
@@ -71,15 +75,17 @@ public class ControllerSubject : MonoBehaviour
                 _isTouchCueBall = false;
             }
         }
+        else
+        {
+            _nonTouchCueBall.OnNext(_isTouchCueBall);
+        }
 
     }
     private void OnDestroy()
     {
-        _beganCueBall.OnCompleted();
         _beganCueBall.Dispose();
-        _movedCueBall.OnCompleted();
         _movedCueBall.Dispose();
-        _endedCueBall.OnCompleted();
         _endedCueBall.Dispose();
+        _nonTouchCueBall.Dispose();
     }
 }

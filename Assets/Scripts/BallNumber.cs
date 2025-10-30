@@ -5,13 +5,13 @@ using UnityEngine;
 
 public enum BallType
 {
-    Cue,
     Obj1,
     Obj2,
     Obj3,
     Obj4,
     Obj5,
     Obj6,
+    Cue,
 }
 public class BallNumber : MonoBehaviour
 {

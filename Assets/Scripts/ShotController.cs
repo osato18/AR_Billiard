@@ -6,14 +6,23 @@ using TMPro;
 public class ShotController : MonoBehaviour
 {
     //Observerパターン
+    [Header("CueBallオブジェクト")]
+    [SerializeField] private CueBallBehavior _cueBallBehaviorSub;
+
     [Header("ControllerSubjectのオブジェ")]
     [SerializeField] private ControllerSubject _controllerSub;
+
+    [Header("BilliardRuleのオブジェ")]
+    [SerializeField] private BilliardRule _billiardRule;
 
     [Header("ガイド矢印")]
     [SerializeField] private GameObject _guideArrowObj;
 
     [Header("プレビュー矢印")]
     [SerializeField] private GameObject _previewArrowObj;
+
+    [Header("手玉")]
+    [SerializeField] private GameObject _cueBallObj;
 
     [Header("飛ばす力（最大値）")]
     [SerializeField] private float _maxShotPower;
@@ -30,13 +39,14 @@ public class ShotController : MonoBehaviour
     private GameObject _showPreviewArrowObj;
     private float _shotPower;
     private bool _isIncreasing = true;
-    private GameObject _cueBallObj;
+
+    private CueBallState _nowCueBallState;
     private void PrepareShotPreview(Touch touch, RaycastHit hit)
     {
         _touchBeganPos = touch.position;  //手玉をタップした際の画面上座標
         //プレビュー
         //_showPreviewArrowObj.transform.SetParent(hit.collider.transform);
-        _cueBallObj= hit.collider.gameObject;
+        _cueBallObj = hit.collider.gameObject;
         _showPreviewArrowObj.SetActive(true);
     }
     private Vector3 ShotPreview(Vector3 cameraForwardVec)  //予告線
@@ -65,15 +75,40 @@ public class ShotController : MonoBehaviour
         _showPreviewArrowObj.SetActive(false);
     }
 
+    private void GuideArrow(CueBallState cueBallState, bool isTouch)
+    {
+        if (cueBallState == CueBallState.Stop)
+        {
+            if (!isTouch)
+            {
+                //手玉が止まっている＆触れられていないとき手玉上にガイド表示
+                _guideArrowObj.transform.position = _cueBallObj.transform.position;
+                _guideArrowObj.SetActive(true);
+            }
+            else
+            {
+                //手玉が止まっている＆触れられているとき次番号玉上にガイド表示
+                _textObj1.text = _billiardRule.TargetBallObj.ToString();
+                _guideArrowObj.transform.position = _billiardRule.TargetBallObj.transform.position;
+                _guideArrowObj.SetActive(true);
+            }
+        }
+        else
+        {
+            _guideArrowObj.SetActive(false);
+        }
+    }
+
     void Start()
     {
+        GuideArrow(CueBallState.Stop, false);
         //_BeganCueBallを購読
         _controllerSub.BeganCueBall.Subscribe(beganData =>
         {
             _shotPower = 0.0f;
             PrepareShotPreview(beganData.Touch, beganData.Hit);
-
-            ;           //指を離したら停止
+            GuideArrow(_nowCueBallState, beganData.IsTouch);
+            //指を離したら停止
             /*Observable.EveryUpdate().TakeUntil(_controllerSub.EndedCueBall).Subscribe(_ =>
             {
 
@@ -85,8 +120,8 @@ public class ShotController : MonoBehaviour
         {
             _shotVector = ShotPreview(movedData.CameraForwardVec);
             _shotPower = AdjustShotPower(_touchBeganPos, movedData.MovedPos);
+            GuideArrow(_nowCueBallState, movedData.IsTouch);
             //Debug用
-            //_textObj1.text = _shotPower.ToString();
             //_textObj2.text = _previewArrowObj.ToString();
         }).AddTo(this);     //GameObject破棄時に自動購読解除
 
@@ -95,6 +130,19 @@ public class ShotController : MonoBehaviour
         {
             Shot(endedData.CueBallRb, _shotVector);
         }).AddTo(this);     //GameObject破棄時に自動購読解除
+
+        //NonTouchCueBallを購読
+        _controllerSub.NonTouchCueBall.Subscribe(nonTouchData =>
+        {
+            GuideArrow(_nowCueBallState, nonTouchData);
+        }).AddTo(this);
+
+        //CueBallBehaviorを購読
+        _cueBallBehaviorSub.CueBallBehaviorSub.Subscribe(cueBallBehaviorSub =>
+        {
+            //CueBallStateをきろく
+            _nowCueBallState = cueBallBehaviorSub;
+        }).AddTo(this);
 
         //プレビュー矢印生成＆非表示
         _showPreviewArrowObj = Instantiate(_previewArrowObj);
