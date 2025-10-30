@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,25 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+
+public struct ClearData
+{
+    public int PocketPoint;
+    public int Life;
+    public int TotalScore;
+}
+
+
 [RequireComponent(typeof(ARRaycastManager))]
 public class BilliardRule : MonoBehaviour
 {
+    //GameLoopに通知
+    private readonly Subject<Unit> _gameStartSub=new Subject<Unit>();
+    private readonly Subject<ClearData> _gameClearSub = new Subject<ClearData>();
+    private readonly Subject<Unit> _gameOverSub = new Subject<Unit>();
+    public IObservable<Unit> GameStartSub => _gameStartSub;
+    public IObservable<ClearData> GameClearSub => _gameClearSub;
+    public IObservable<Unit> GameOverSub => _gameOverSub;
     [SerializeField] private ARPlaneManager _planeManager;
     [SerializeField] private GameObject _rayPointObj;
 
@@ -36,7 +53,7 @@ public class BilliardRule : MonoBehaviour
     void Start()
     {
         _targetBallType = BallType.Obj1;
-        TargetBallObj=_ballObj[(int)_targetBallType];
+        TargetBallObj = _ballObj[(int)_targetBallType];
         //OBの購読
         _OBSubj.OBBall.Subscribe(obBall =>
         {
@@ -57,8 +74,16 @@ public class BilliardRule : MonoBehaviour
         Debug.Log("pocket!_" + _targetBallType.ToString());
         if (ballData.pocketedBallType == _targetBallType)
         {
-            EvolveBallType(ballData.pocketedObj);
             Score += 1000;
+            if (ballData.pocketedBallType != BallType.Obj6)    //次の手玉番号に進む
+            {
+                EvolveBallType(ballData.pocketedObj);
+            }
+            else
+            {
+                ballData.pocketedObj.SetActive(false);
+                GameClear();
+            }
         }
         else
         {
@@ -73,7 +98,7 @@ public class BilliardRule : MonoBehaviour
         if (_targetBallType <= BallType.Obj6)
         {
             _targetBallType++;
-            TargetBallObj=_ballObj[(int)_targetBallType];
+            TargetBallObj = _ballObj[(int)_targetBallType];
         }
     }
 
@@ -105,11 +130,14 @@ public class BilliardRule : MonoBehaviour
         {
             plane.gameObject.SetActive(false);
         }
+
+        //GameLoopへ通知
+        _gameStartSub.OnNext(Unit.Default);
     }
     private void ReSetObj(OBObjData obObjData)
     {
-        float randomNum_x = Random.Range(-0.5f, 0.5f);
-        float randomNum_z = Random.Range(-0.5f, 0.5f);
+        float randomNum_x = UnityEngine.Random.Range(-0.3f, 0.3f);
+        float randomNum_z = UnityEngine.Random.Range(-0.3f, 0.3f);
         obObjData.obCollider.gameObject.SetActive(false);
         obObjData.obCollider.transform.position = _boardObj.transform.position + new Vector3(randomNum_x, 0.1f, randomNum_z);
         obObjData.obRb.velocity = Vector3.zero;
@@ -117,8 +145,26 @@ public class BilliardRule : MonoBehaviour
         obObjData.obCollider.gameObject.SetActive(true);
     }
 
+    private void GameClear()
+    {
+        Debug.Log("GameClear!!!");
+        //ゲームクリア通知（GameLoopへ）
+        _gameClearSub.OnNext(new ClearData
+        {
+            PocketPoint = Score,
+            Life = _playerLife,
+            TotalScore=Score+_playerLife*100,
+        });
+    }
     private void GameOver()
     {
         Debug.Log("GameOver...");
+        //ゲームオーバー通知（GameLoopへ）
+        _gameOverSub.OnNext(Unit.Default);
+    }
+
+    private void OnDestroy()
+    {
+        _gameClearSub.Dispose();
     }
 }
