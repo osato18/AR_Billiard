@@ -28,12 +28,15 @@ public class BilliardRule : MonoBehaviour
     [SerializeField] private int _playerLife;
     private BallType _targetBallType;
 
+
+    public GameObject TargetBallObj;
     public int Score;
 
 
     void Start()
     {
         _targetBallType = BallType.Obj1;
+        TargetBallObj=_ballObj[(int)_targetBallType];
         //OBの購読
         _OBSubj.OBBall.Subscribe(obBall =>
         {
@@ -67,9 +70,10 @@ public class BilliardRule : MonoBehaviour
     {
         ballObj.SetActive(false);
         Debug.Log("match!");
-        if (_targetBallType >= BallType.Obj6)
+        if (_targetBallType <= BallType.Obj6)
         {
             _targetBallType++;
+            TargetBallObj=_ballObj[(int)_targetBallType];
         }
     }
 
