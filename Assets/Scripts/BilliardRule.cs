@@ -19,8 +19,14 @@ public struct ClearData
 [RequireComponent(typeof(ARRaycastManager))]
 public class BilliardRule : MonoBehaviour
 {
+
+    //PreviewManagerに通知
+    private readonly Subject<Unit> _setBoardSub = new Subject<Unit>();
+    public IObservable<Unit> SetBoardSub => _setBoardSub;
+
+
     //GameLoopに通知
-    private readonly Subject<Unit> _gameStartSub=new Subject<Unit>();
+    private readonly Subject<Unit> _gameStartSub = new Subject<Unit>();
     private readonly Subject<ClearData> _gameClearSub = new Subject<ClearData>();
     private readonly Subject<Unit> _gameOverSub = new Subject<Unit>();
     public IObservable<Unit> GameStartSub => _gameStartSub;
@@ -130,6 +136,8 @@ public class BilliardRule : MonoBehaviour
         {
             plane.gameObject.SetActive(false);
         }
+        //PreviewManagerへ通知
+        _setBoardSub.OnNext(Unit.Default);
 
         //GameLoopへ通知
         _gameStartSub.OnNext(Unit.Default);
@@ -153,7 +161,7 @@ public class BilliardRule : MonoBehaviour
         {
             PocketPoint = Score,
             Life = _playerLife,
-            TotalScore=Score+_playerLife*100,
+            TotalScore = Score + _playerLife * 100,
         });
     }
     private void GameOver()
@@ -165,6 +173,7 @@ public class BilliardRule : MonoBehaviour
 
     private void OnDestroy()
     {
+        _setBoardSub.Dispose();
         _gameClearSub.Dispose();
     }
 }
