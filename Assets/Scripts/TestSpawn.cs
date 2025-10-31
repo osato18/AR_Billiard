@@ -59,7 +59,7 @@ public class TestSpawn : MonoBehaviour
 
     public void BordSpawn()
     {
-        Instantiate(_bordObj, _rayPointObj.transform.position + (_rayPointObj.transform.up / 3), Quaternion.Euler(0, 0, 0));
+        Instantiate(_bordObj, _rayPointObj.transform.position, Quaternion.Euler(0, 0, 0));
         Instantiate(_cueBallObj, _rayPointObj.transform.position + _rayPointObj.transform.up, Quaternion.identity);
         _planeManager.enabled = false;
         foreach (var plane in _planeManager.trackables)
