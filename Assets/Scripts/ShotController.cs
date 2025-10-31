@@ -30,10 +30,6 @@ public class ShotController : MonoBehaviour
     [Header("飛ばす力（増幅度）")]
     [SerializeField] private float _deltaShotPower;
 
-    //Debug用
-    [SerializeField] private TextMeshProUGUI _textObj1;
-    [SerializeField] private TextMeshProUGUI _textObj2;
-
     private Vector3 _touchBeganPos;
     private Vector3 _shotVector;
     private GameObject _showPreviewArrowObj;
@@ -88,7 +84,6 @@ public class ShotController : MonoBehaviour
             else
             {
                 //手玉が止まっている＆触れられているとき次番号玉上にガイド表示
-                _textObj1.text = _billiardRule.TargetBallObj.ToString();
                 _guideArrowObj.transform.position = _billiardRule.TargetBallObj.transform.position;
                 _guideArrowObj.SetActive(true);
             }

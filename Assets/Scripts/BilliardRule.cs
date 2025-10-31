@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -15,10 +16,16 @@ public struct ClearData
     public int TotalScore;
 }
 
-
 [RequireComponent(typeof(ARRaycastManager))]
 public class BilliardRule : MonoBehaviour
 {
+    //UIManagerに通知
+    private readonly Subject<int> _lifeSub = new Subject<int>();
+
+    public IObservable<int> LifeSub => _lifeSub;
+    private readonly Subject<int> _scoreSub = new Subject<int>();
+
+    public IObservable<int> ScoreSub => _scoreSub;
 
     //PreviewManagerに通知
     private readonly Subject<Unit> _setBoardSub = new Subject<Unit>();
@@ -48,7 +55,7 @@ public class BilliardRule : MonoBehaviour
     [SerializeField] private OBSubject _OBSubj;
 
     [Header("ライフ")]
-    [SerializeField] private int _playerLife;
+    [SerializeField] public int PlayerLife;
     private BallType _targetBallType;
 
 
@@ -81,6 +88,7 @@ public class BilliardRule : MonoBehaviour
         if (ballData.pocketedBallType == _targetBallType)
         {
             Score += 1000;
+            _scoreSub.OnNext(Score);
             if (ballData.pocketedBallType != BallType.Obj6)    //次の手玉番号に進む
             {
                 EvolveBallType(ballData.pocketedObj);
@@ -110,11 +118,12 @@ public class BilliardRule : MonoBehaviour
 
     private void PockedBallTypeFoul()
     {
-        if (_playerLife > 0)
+        if (PlayerLife > 0)
         {
             Debug.Log("no_match");
-            _playerLife--;
-            Debug.Log("" + _playerLife);
+            PlayerLife--;
+            Debug.Log("" + PlayerLife);
+            _lifeSub.OnNext(PlayerLife);
         }
         else
         {
@@ -160,8 +169,8 @@ public class BilliardRule : MonoBehaviour
         _gameClearSub.OnNext(new ClearData
         {
             PocketPoint = Score,
-            Life = _playerLife,
-            TotalScore = Score + _playerLife * 100,
+            Life = PlayerLife,
+            TotalScore = Score + PlayerLife * 100,
         });
     }
     private void GameOver()
