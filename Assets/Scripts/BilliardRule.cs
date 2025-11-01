@@ -39,6 +39,18 @@ public class BilliardRule : MonoBehaviour
     public IObservable<Unit> GameStartSub => _gameStartSub;
     public IObservable<ClearData> GameClearSub => _gameClearSub;
     public IObservable<Unit> GameOverSub => _gameOverSub;
+
+    //SoundManagerへ通知
+    private readonly Subject<Unit> _gameOverBgmSub = new Subject<Unit>();
+    private readonly Subject<Unit> _gameClearBgmSub = new Subject<Unit>();
+    private readonly Subject<Unit> _successSESub = new Subject<Unit>();
+    private readonly Subject<Unit> _foulSESub = new Subject<Unit>();
+    public IObservable<Unit> GameOverBgmSub => _gameOverBgmSub;
+    public IObservable<Unit> GameClearBgmSub => _gameClearBgmSub;
+    public IObservable<Unit> SuccessSESub => _successSESub;
+    public IObservable<Unit> FoulSESub => _foulSESub;
+
+
     [SerializeField] private ARPlaneManager _planeManager;
     [SerializeField] private GameObject _rayPointObj;
 
@@ -82,6 +94,12 @@ public class BilliardRule : MonoBehaviour
         }).AddTo(this);
     }
 
+    public void OnChildHit(GameObject child, Collider other)
+    {
+        
+    }
+
+
     private void CompareBallType(PocketedData ballData)
     {
         Debug.Log("pocket!_" + _targetBallType.ToString());
@@ -89,6 +107,7 @@ public class BilliardRule : MonoBehaviour
         {
             Score += 1000;
             _scoreSub.OnNext(Score);
+            _successSESub.OnNext(Unit.Default);
             if (ballData.pocketedBallType != BallType.Obj6)    //次の手玉番号に進む
             {
                 EvolveBallType(ballData.pocketedObj);
@@ -118,6 +137,7 @@ public class BilliardRule : MonoBehaviour
 
     private void PockedBallTypeFoul()
     {
+        _foulSESub.OnNext(Unit.Default);
         if (PlayerLife > 0)
         {
             Debug.Log("no_match");
@@ -136,7 +156,7 @@ public class BilliardRule : MonoBehaviour
     {
         // レイポイント位置の少し上にボードを生成
         _boardObj.SetActive(true);
-        _boardObj.transform.position = _rayPointObj.transform.position + (_rayPointObj.transform.up / 3);
+        _boardObj.transform.position = _rayPointObj.transform.position;
         _boardObj.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         // プレーン検出を停止し、既存プレーンを非表示にする
@@ -153,8 +173,8 @@ public class BilliardRule : MonoBehaviour
     }
     private void ReSetObj(OBObjData obObjData)
     {
-        float randomNum_x = UnityEngine.Random.Range(-0.3f, 0.3f);
-        float randomNum_z = UnityEngine.Random.Range(-0.3f, 0.3f);
+        float randomNum_x = UnityEngine.Random.Range(-0.2f, 0.2f);
+        float randomNum_z = UnityEngine.Random.Range(-0.2f, 0.2f);
         obObjData.obCollider.gameObject.SetActive(false);
         obObjData.obCollider.transform.position = _boardObj.transform.position + new Vector3(randomNum_x, 0.1f, randomNum_z);
         obObjData.obRb.velocity = Vector3.zero;
@@ -164,6 +184,7 @@ public class BilliardRule : MonoBehaviour
 
     private void GameClear()
     {
+        _gameClearBgmSub.OnNext(Unit.Default);
         Debug.Log("GameClear!!!");
         //ゲームクリア通知（GameLoopへ）
         _gameClearSub.OnNext(new ClearData
@@ -176,13 +197,30 @@ public class BilliardRule : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("GameOver...");
-        //ゲームオーバー通知（GameLoopへ）
+        //ゲームオーバー通知
+        _gameOverBgmSub.OnNext(Unit.Default);
         _gameOverSub.OnNext(Unit.Default);
     }
 
     private void OnDestroy()
     {
+        // UI通知
+        _lifeSub.Dispose();
+        _scoreSub.Dispose();
+
+        // PreviewManager通知
         _setBoardSub.Dispose();
+
+        // GameLoop通知
+        _gameStartSub.Dispose();
         _gameClearSub.Dispose();
+        _gameOverSub.Dispose();
+
+        // SoundManager通知
+        _gameOverBgmSub.Dispose();
+        _gameClearBgmSub.Dispose();
+        _successSESub.Dispose();
+        _foulSESub.Dispose();
     }
+
 }

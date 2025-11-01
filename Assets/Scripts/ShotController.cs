@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using TMPro;
+using System.Linq;
+
 public class ShotController : MonoBehaviour
 {
     //Observerパターン
