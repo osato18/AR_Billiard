@@ -73,6 +73,8 @@ public class BilliardRule : MonoBehaviour
 
     public GameObject TargetBallObj;
     public int Score;
+    public Vector3 BaseBoardPos;
+    public Quaternion BaseBoardRot;
 
 
     void Start()
@@ -158,6 +160,10 @@ public class BilliardRule : MonoBehaviour
         _boardObj.SetActive(true);
         _boardObj.transform.position = _rayPointObj.transform.position;
         _boardObj.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        //ボードのべ－ス座標・回転登録
+        BaseBoardPos = _boardObj.transform.position;
+        BaseBoardRot=_boardObj.transform.rotation;
 
         // プレーン検出を停止し、既存プレーンを非表示にする
         _planeManager.enabled = false;
