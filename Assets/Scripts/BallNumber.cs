@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 
@@ -16,7 +18,14 @@ public enum BallType
 public class BallNumber : MonoBehaviour
 {
     public BallType MyBallNum;
-    // Start is called before the first frame update
+
+    private readonly Subject<Unit> _isColliderSESub = new Subject<Unit>();
+    public IObservable<Unit> IsColliderSESub=> _isColliderSESub;
+
+    void OnCollisionEnter(Collision collision)
+    {
+        _isColliderSESub.OnNext(Unit.Default);
+    }
     void Start()
     {
 

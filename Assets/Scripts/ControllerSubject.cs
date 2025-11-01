@@ -24,13 +24,15 @@ public class ControllerSubject : MonoBehaviour
     private readonly Subject<TouchData> _beganCueBall=new Subject<TouchData>();
     private readonly Subject<TouchData> _movedCueBall = new Subject<TouchData>();
     private readonly Subject<TouchData> _endedCueBall = new Subject<TouchData>();
-    private readonly Subject<bool> _nonTouchCueBall=new Subject<bool>();
+    private readonly Subject<bool> _nonTouchCueBall = new Subject<bool>();
+    private readonly Subject<Unit> _isShotSESun=new Subject<Unit>();
 
     // 外部から購読できるように公開する（IObservableにする）
     public IObservable<TouchData> BeganCueBall =>_beganCueBall;
     public IObservable<TouchData> MovedCueBall => _movedCueBall;
     public IObservable<TouchData> EndedCueBall => _endedCueBall;
-    public IObservable<bool> NonTouchCueBall=>_nonTouchCueBall;
+    public IObservable<bool> NonTouchCueBall => _nonTouchCueBall;
+    public IObservable<Unit> IsShotSESub=>_isShotSESun;
     void Update()
     {
         if (Input.touchCount > 0)   //タッチ数カウント
@@ -68,6 +70,7 @@ public class ControllerSubject : MonoBehaviour
 
             else if (touch.phase == TouchPhase.Ended && _isTouchCueBall)
             {
+                _isShotSESun.OnNext(Unit.Default);
                 _endedCueBall.OnNext(new TouchData
                 {
                     CueBallRb = _cueBallRb,
