@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using TMPro;
-using System.Linq;
 
 public class ShotController : MonoBehaviour
 {
@@ -47,9 +46,9 @@ public class ShotController : MonoBehaviour
         _cueBallObj = hit.collider.gameObject;
         _showPreviewArrowObj.SetActive(true);
     }
-    private Vector3 ShotPreview(Vector3 cameraForwardVec)  //予告線
+    private Vector3 ShotPreview(Vector3 cameraDiagonalUpVec)  //予告線
     {
-        Vector3 shotVector = new Vector3(cameraForwardVec.x, 0, cameraForwardVec.z);
+        Vector3 shotVector = new Vector3(cameraDiagonalUpVec.x, 0, cameraDiagonalUpVec.z);
         shotVector = shotVector.normalized;
         //プレビュー（方向）
         Quaternion arrowRot = Quaternion.LookRotation(shotVector);
@@ -115,7 +114,7 @@ public class ShotController : MonoBehaviour
         //_MovedCueBallを購読
         _controllerSub.MovedCueBall.Subscribe(movedData =>
         {
-            _shotVector = ShotPreview(movedData.CameraForwardVec);
+            _shotVector = ShotPreview(movedData.DiagonalUpVec);
             _shotPower = AdjustShotPower(_touchBeganPos, movedData.MovedPos);
             GuideArrow(_nowCueBallState, movedData.IsTouch);
             //Debug用

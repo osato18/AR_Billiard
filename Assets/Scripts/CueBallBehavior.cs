@@ -15,12 +15,6 @@ public class CueBallBehavior : MonoBehaviour
     public CueBallState MyCueBallState;
     [SerializeField] private GameObject _cueBallPointer;
     private Rigidbody _cueBallRb;
-
-    private void StopBall()
-    {
-        _cueBallRb.velocity = Vector3.zero;
-        _cueBallRb.angularVelocity = Vector3.zero;
-    }
     void Start()
     {
         MyCueBallState = CueBallState.Stop;
@@ -30,10 +24,9 @@ public class CueBallBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_cueBallRb.velocity.magnitude < 0.1)
+        if (_cueBallRb.velocity.magnitude < 0.07)
         {
             MyCueBallState = CueBallState.Stop;
-            StopBall();
             _cueBallBehaviorSub.OnNext(MyCueBallState);
             gameObject.layer = LayerMask.NameToLayer("Default");
         }
