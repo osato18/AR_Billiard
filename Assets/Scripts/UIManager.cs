@@ -11,16 +11,16 @@ public class UImanager : MonoBehaviour
 
     private void LifeTextChanger(TextMeshProUGUI lifeText, int lifeData)
     {
-        lifeText.text = "Lives : " + lifeData.ToString();
+        lifeText.text = "残機 : " + lifeData.ToString();
     }
     private void ScoreTextChanger(TextMeshProUGUI scoreText, int scoreData)
     {
-        scoreText.text = "Lives : " + scoreData.ToString();
+        scoreText.text = "スコア : " + scoreData.ToString();
     }
     void Start()
     {
-        _lifeText.text = "Lives : " + _billiardRule.PlayerLife.ToString();
-        _scoreText.text = "Score : " + _billiardRule.Score.ToString();
+        _lifeText.text = "残機 : " + _billiardRule.PlayerLife.ToString();
+        _scoreText.text = "スコア : " + _billiardRule.Score.ToString();
 
         _billiardRule.LifeSub.Subscribe(Life =>
         {
