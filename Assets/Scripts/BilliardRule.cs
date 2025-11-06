@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.UI;
 
 
 public struct ClearData
@@ -68,6 +69,12 @@ public class BilliardRule : MonoBehaviour
 
     [Header("ライフ")]
     [SerializeField] public int PlayerLife;
+
+    [Header("NextBallImage")]
+    [SerializeField] private Image _nextBallImage;
+
+    [Header("各番号玉スプライト")]
+    [SerializeField] private Sprite[] _numberBallSprits;
     private BallType _targetBallType;
 
 
@@ -81,6 +88,7 @@ public class BilliardRule : MonoBehaviour
     {
         _targetBallType = BallType.Obj1;
         TargetBallObj = _ballObj[(int)_targetBallType];
+        _nextBallImage.sprite = _numberBallSprits[(int)_targetBallType];
         //OBの購読
         _OBSubj.OBBall.Subscribe(obBall =>
         {
@@ -134,6 +142,7 @@ public class BilliardRule : MonoBehaviour
         {
             _targetBallType++;
             TargetBallObj = _ballObj[(int)_targetBallType];
+            _nextBallImage.sprite = _numberBallSprits[(int)_targetBallType];
         }
     }
 

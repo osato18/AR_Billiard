@@ -27,9 +27,9 @@ public class GameLoop : MonoBehaviour
     {
         _gamePlayCanvasObj.SetActive(false);
         _gameClearCanvasObj.SetActive(true);
-        _pocketPointText.text = "Pocket Point : " + clearData.PocketPoint.ToString();
-        _lifeBonusText.text = "Life Bonus : 100 × " + clearData.Life.ToString();
-        _totalScoreText.text = "Score : " + clearData.TotalScore.ToString();
+        _pocketPointText.text = "ポケットスコア : " + clearData.PocketPoint.ToString();
+        _lifeBonusText.text = "残機ボーナス : 100 × " + clearData.Life.ToString();
+        _totalScoreText.text = "合計スコア : " + clearData.TotalScore.ToString();
     }
 
     private void GameOver()
